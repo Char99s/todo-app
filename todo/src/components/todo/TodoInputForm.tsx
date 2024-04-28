@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import PlusIcon from '../assets/Plus.svg'
-import { useFrappeCreateDoc } from 'frappe-react-sdk'
+import PlusIcon from '../../assets/Plus.svg'
+import { useFrappeCreateDoc, useFrappeAuth } from 'frappe-react-sdk'
 
 export const TodoInputForm = () => {
 
@@ -17,18 +17,21 @@ export const TodoInputForm = () => {
   const [input, setInput] = useState('')
   const [inputInvalid, setInputInvalid] = useState(false)
 
-  {/* Hook to access createDoc in order to create a new document */}
-  const { createDoc, loading, error } = useFrappeCreateDoc()
+  {/* Get current user, then create a new doc for this user with createDoc */}
+  const { currentUser } = useFrappeAuth()
+  const { createDoc } = useFrappeCreateDoc()
 
-  {/* Create new document on Submit (new documents will automatically have a pending status) */}
+  {/* Create new document on Submit (new documents will automatically have an Open status) */}
   const onSubmit = async (data) => {
     {/* Check if input is not empty */}
     if(input != ''){
       setInputInvalid(false)
-      createDoc('ToDoReact', {
+      createDoc('ToDo', {
         description: input,
-        status: 'Pending'
+        status: 'Open',
+        allocated_to: currentUser,
       })
+      window.location.reload()
     }else{
       setInputInvalid(true)
     }

@@ -1,8 +1,6 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
 import './App.css'
 import { FrappeProvider } from 'frappe-react-sdk'
-import { TodoWrapper } from './components/TodoWrapper.tsx'
+import { ComponentTree } from './components/ComponentTree.tsx'
 
 function App() {
 	//Styling for App
@@ -14,7 +12,7 @@ function App() {
 	<div className={styles.app}>
 	{/* specify the localhost port on which our Frappe app is running */}
 	  <FrappeProvider SocketPort={import.meta.env.VITE_SOCKET_PORT ?? ''}>
-		<TodoWrapper/>
+		<ComponentTree />
 	  </FrappeProvider>
 
 	</div>

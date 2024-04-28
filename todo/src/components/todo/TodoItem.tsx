@@ -1,6 +1,6 @@
 import React from 'react'
-import CheckIcon from '../assets/Check.svg'
-import TrashIcon from '../assets/TrashSimple.svg'
+import CheckIcon from '../../assets/Check.svg'
+import TrashIcon from '../../assets/TrashSimple.svg'
 import { useFrappeDeleteDoc, useFrappeUpdateDoc } from 'frappe-react-sdk'
 
 {/* Define our props types */}
@@ -20,35 +20,36 @@ export const TodoItem = (props: TodoProps) => {
     }
 
     { /* Hooks to delete and update docs */}
-    const { deleteDoc, error, loading: deletingDoc, reset } = useFrappeDeleteDoc()
-    const { updateDoc, loading } = useFrappeUpdateDoc()
+    const { deleteDoc } = useFrappeDeleteDoc()
+    const { updateDoc } = useFrappeUpdateDoc()
 
-    {/* Delete document */}
+    {/* Delete document (Not used but available for CRUD operations) */}
     const onDelete = () => {
         deleteDoc('ToDoReact', props.name)
     }
 
     {/* Update document */}
-    const onUpdate = () => {
-        updateDoc('ToDoReact', props.name, {
-            status: 'Done',
+    const onUpdate = (status: string) => {
+        updateDoc('ToDo', props.name, {
+            status: status,
         })
+        window.location.reload()
     }
 
   return (
     <div className={styles.wrapper}>
-        {/* Checking item status to strike it if done and color it in green */}
+        {/* Checking item status to strike text and color it in green if Closed  */}
         <div>
-            { props.status == 'Pending' ? <p>{props.description}</p> : <p className={styles.doneText}>{props.description}</p> }
+            { props.status == 'Open' ? <p>{props.description}</p> : <p className={styles.doneText}>{props.description}</p> }
         </div>
 
-        {/* If the Todo status is pending, do not render the action buttons */}
-        {props.status == 'Pending' ?
+        {/* render the action buttons only if status is open */}
+        {props.status == 'Open' ?
         <div className={styles.btnContainer}>
-            <button className={styles.actionBtn} onClick={onUpdate}>
+            <button className={styles.actionBtn} onClick={() => onUpdate('Closed')}>
                 <img src={CheckIcon}/>
              </button>
-             <button className={styles.actionBtn} onClick={onDelete}>
+             <button className={styles.actionBtn} onClick={() => onUpdate('Cancelled')}>
                 <img src={TrashIcon}/>
              </button>
         </div> : null
